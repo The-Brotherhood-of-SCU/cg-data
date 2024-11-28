@@ -8,7 +8,8 @@ def compress_file(input_file_path, output_gz_file_path):
     with open(input_file_path, 'rb') as f_in:
         with gzip.open(output_gz_file_path, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
-
+def remove_empty_entry(l:list):
+    return [i for i in l if i!=""]
 os.makedirs("out",exist_ok=True)
 
 files = [i for i in os.listdir("src") if i.endswith(".txt") or i.endswith(".json")]
@@ -21,6 +22,8 @@ for i in files:
             raw_list+=raw.split("\n\n")
         elif i.endswith(".json"):
             raw_list+=json.loads(raw)
+            
+raw_list=remove_empty_entry(raw_list)
 
 class Entry:
     def __init__(self, question: str, answer: str):
