@@ -35,10 +35,23 @@ jobs:
       run: |
         python gen.py
 
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.4.3
-      with: 
-       folder: out
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+          path: ./out
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2  
         
     
 
